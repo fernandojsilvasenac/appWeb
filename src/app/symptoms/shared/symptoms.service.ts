@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Symptoms } from './interface/symptoms';
+// import { Symptoms } from './interface/symptoms';
+import { Symptoms } from './symptoms';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -33,7 +34,20 @@ export class SymptomsService {
 
    }
 
-   addSymptoms(){
+   addSymptoms(symptoms: Symptoms){
+      // return this.symptomsCollection.add(symptoms);
+      // 2 momento
+      // criar id
+      const id = this.afs.createId();
+
+      this.afs.collection('symptoms').doc(id).set(
+        {
+          name: symptoms.name,
+          description: symptoms.description,
+          imgUrl: symptoms.imgUrl != null ? symptoms.imgUrl : "",
+          filePath: symptoms.filePath != null ? symptoms.filePath : "",
+        }
+      )
 
    }
 
