@@ -35,17 +35,19 @@ export class SymptomsService {
    }
 
    addSymptoms(symptoms: Symptoms){
+      // 1 momento
+      // console.log(symptoms)
       // return this.symptomsCollection.add(symptoms);
+
       // 2 momento
       // criar id
       const id = this.afs.createId();
+      const { name, description } = symptoms;
 
       this.afs.collection('symptoms').doc(id).set(
         {
-          name: symptoms.name,
-          description: symptoms.description,
-          imgUrl: symptoms.imgUrl != null ? symptoms.imgUrl : "",
-          filePath: symptoms.filePath != null ? symptoms.filePath : "",
+          name: name,
+          description: description,
         }
       )
 
@@ -55,8 +57,8 @@ export class SymptomsService {
 
    }
 
-   deleteSymptoms(){
-
+   deleteSymptoms(id: string){
+      this.symptomsCollection.doc<Symptoms>(id).delete();
    }
 
 
