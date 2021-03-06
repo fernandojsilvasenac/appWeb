@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './shared/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
   },
   {
     path: 'symptoms-list',
-    loadChildren: () => import('./symptoms/symptoms-list/symptoms-list.module').then( m => m.SymptomsListPageModule)
+    loadChildren: () => import('./symptoms/symptoms-list/symptoms-list.module').then( m => m.SymptomsListPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'symptoms-form/new',
@@ -25,7 +27,12 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule)
+    loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   }
 ];
 

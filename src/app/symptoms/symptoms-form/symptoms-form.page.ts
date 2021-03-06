@@ -36,8 +36,8 @@ export class SymptomsFormPage implements OnInit {
   }
 
   async onSubmit(){
-    console.log(this.symptoms)
-    // this.symptomsId = this.activatedRoute.snapshot.params['id'];
+    // console.log(this.symptoms)
+
     if (this.symptomsId){
       // update
       try {
