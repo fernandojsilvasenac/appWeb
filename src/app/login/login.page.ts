@@ -29,5 +29,4 @@ export class LoginPage implements OnInit {
       this.toast.showMessageTop(error,'danger');
     }
   }
-
 }
