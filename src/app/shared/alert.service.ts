@@ -8,10 +8,10 @@ export class AlertService {
 
   constructor(private alertController: AlertController) { }
 
-  async showConfirmarExclusão(nome: string, actionRemove: () => void){
+  async showConfirmarExclusão(name: string, actionRemove: () => void){
     const alert = await this.alertController.create({
       header: 'Remover o item? ',
-      message: `Deseja remover o item: ${nome}`,
+      message: `Deseja remover o item: ${name}`,
       buttons: [
         {
           text: 'Cancelar'
@@ -26,4 +26,7 @@ export class AlertService {
     });
     await alert.present();
   }
+
+
+
 }

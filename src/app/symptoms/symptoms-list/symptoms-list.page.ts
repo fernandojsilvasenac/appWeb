@@ -1,3 +1,4 @@
+import { AlertService } from './../../shared/alert.service';
 import { Component, OnInit } from '@angular/core';
 import { SymptomsService } from './../shared/symptoms.service';
 import { Observable } from 'rxjs';
@@ -10,9 +11,10 @@ import { ToastService } from './../../shared/toast.service';
 })
 export class SymptomsListPage implements OnInit {
   symptoms: Observable<any[]>;
-
+  symptomsId: string;
   constructor(private symptomsService:SymptomsService,
-              private toast:ToastService) { }
+              private toast:ToastService,
+              private alert:AlertService) { }
 
   ngOnInit() {
     this.getAll();
@@ -22,7 +24,13 @@ export class SymptomsListPage implements OnInit {
     this.symptoms = this.symptomsService.getAll();
   }
 
-  removeSymptom(id: string){
+  // aqui chama o alert pra confirmar a exclusão
+  removeSymptom(symptom: any){
+    this.alert.showConfirmarExclusão(symptom.name, ()=> this.remove(symptom.id) );
+  }
+
+  // aqui chama o servico passando (id) para o delete no banco
+  remove(id: string){
     this.symptomsService.deleteSymptoms(id);
     try {
       this.toast.showMessageBottom('Sintoma excluído com sucesso!','success');

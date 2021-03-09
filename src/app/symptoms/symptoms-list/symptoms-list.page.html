@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-list>
     <ion-item *ngFor="let symptom of symptoms | async">
       <ion-grid> <!--grid -->
@@ -26,7 +26,7 @@
             </ion-button>
           </ion-col>
           <ion-col> <!--4-->
-            <ion-button color="danger" (click)="removeSymptom(symptom.id)">
+            <ion-button color="danger" (click)="removeSymptom(symptom)">
               <ion-icon name="trash"></ion-icon>
             </ion-button>
           </ion-col>
@@ -36,11 +36,10 @@
             <!-- <span [innerHTML]="symptom.description"></span> -->
           </ion-col>
         </ion-row>
-
       </ion-grid> <!--/grid -->
-
     </ion-item>
   </ion-list>
+
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button [routerLink]="['/symptoms-form/new']">
       <ion-icon name="add-circle-outline">Adicionar</ion-icon>

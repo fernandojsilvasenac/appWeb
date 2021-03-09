@@ -10,7 +10,8 @@ const routes: Routes = [
   },
   {
     path: 'users',
-    loadChildren: () => import('./users/users.module').then( m => m.UsersPageModule)
+    loadChildren: () => import('./users/users.module').then( m => m.UsersPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'symptoms-list',
