@@ -1,6 +1,7 @@
+import { UsersService } from './../users/shared/users.service';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 import { ToastService } from './toast.service';
@@ -9,10 +10,12 @@ import { ToastService } from './toast.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+  userid: string;
 
   constructor(
     private router: Router,
     private afa: AngularFireAuth,
+    private userService: UsersService,
     private toast: ToastService
   ){}
 
@@ -29,6 +32,18 @@ export class AuthGuard implements CanActivate {
           this.router.navigate(['/login']);
           this.toast.showMessageTop('Usuário não logado!!!', 'warning');
         }
+        else {
+          //
+          this.afa.authState.subscribe(user =>{
+            this.userService.getById(user.uid).subscribe( (data: any) =>{
+              if (data.tipousuario =='paciente'){
+                this.router.navigate(['/login']);
+                this.toast.showMessageTop('Usuário Paciente sem permissão!!!', 'danger');
+              }
+            })
+          })
+        }
+
       })
     )
 

@@ -26,6 +26,7 @@ export class SymptomsListPage implements OnInit {
 
   // aqui chama o alert pra confirmar a exclusão
   removeSymptom(symptom: any){
+
     this.alert.showConfirmarExclusão(symptom.name, ()=> this.remove(symptom.id) );
   }
 
