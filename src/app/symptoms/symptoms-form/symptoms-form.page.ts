@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Symptoms } from '../shared/symptoms';
 import { SymptomsService } from './../shared/symptoms.service';
 import { ToastService } from './../../shared/toast.service';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-symptoms-form',
@@ -11,16 +12,25 @@ import { ToastService } from './../../shared/toast.service';
 })
 export class SymptomsFormPage implements OnInit {
   symptoms: Symptoms;
-  private symptomsId: string;
+  symptomsId: string = '';
+  private file: File = null;
+
   title: string;
+  filePath: string = ''; // caminho do storage, a pasta que será gravada
+  imgUrl: string = ''; // url da imagem, <img [src]="imgUrl">
+  hasImg: Boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
               private symptomsService: SymptomsService,
+              private storage: AngularFireStorage,
               private router: Router,
               private toast: ToastService) { }
 
   ngOnInit() {
     this.symptoms = new Symptoms();
+    this.symptoms.name = "";
+    this.symptoms.description = "";
+
     this.symptomsId = this.activatedRoute.snapshot.params['id'];
     this.symptomsId ? this.title = "EDITAR Sintoma" : this.title = "NOVO Sintoma";
 
@@ -30,9 +40,31 @@ export class SymptomsFormPage implements OnInit {
         const { name, description, imgUrl, filePath } = data;
         this.symptoms.name = name;
         this.symptoms.description = description;
+        this.filePath = filePath;
+        this.imgUrl = imgUrl;
+        this.hasImg = this.imgUrl == '' ? false : true;
       })
     }
 
+  }
+
+  upload(event: any){
+    if(event.target.files.length){
+      this.file = event.target.files[0];
+    } else {
+      this.file = null;
+    }
+  }
+
+  async removerImg(id: string, filePath: string){
+     try {
+       await this.symptomsService.removerImg(id, filePath);
+       this.imgUrl = '';
+       this.filePath = '';
+       this.hasImg = false;
+     } catch (error) {
+       this.toast.showMessageTop(error,'danger');
+     }
   }
 
   async onSubmit(){
@@ -41,7 +73,7 @@ export class SymptomsFormPage implements OnInit {
     if (this.symptomsId){
       // update
       try {
-        await this.symptomsService.updateSymptoms(this.symptoms, this.symptomsId);
+        await this.symptomsService.updateSymptoms(this.symptoms, this.symptomsId, this.file);
         // mensagem OK
         this.toast.showMessageBottom('Sintoma alterado com sucesso!!!','success')
         this.router.navigate(['/symptoms-list']);
@@ -54,7 +86,7 @@ export class SymptomsFormPage implements OnInit {
     } else {
       // add
       try {
-        await this.symptomsService.addSymptoms(this.symptoms);
+        await this.symptomsService.addSymptoms(this.symptoms, this.file);
         // mensagem OK
         this.toast.showMessageBottom('Sintoma inserido com sucesso!!!','success')
         this.router.navigate(['/symptoms-list']);

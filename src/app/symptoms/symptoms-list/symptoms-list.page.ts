@@ -27,12 +27,12 @@ export class SymptomsListPage implements OnInit {
   // aqui chama o alert pra confirmar a exclusão
   removeSymptom(symptom: any){
 
-    this.alert.showConfirmarExclusão(symptom.name, ()=> this.remove(symptom.id) );
+    this.alert.showConfirmarExclusão(symptom.name, ()=> this.remove(symptom) );
   }
 
   // aqui chama o servico passando (id) para o delete no banco
-  remove(id: string){
-    this.symptomsService.deleteSymptoms(id);
+  remove(symptom: any){
+    this.symptomsService.deleteSymptoms(symptom.id, symptom.filePath );
     try {
       this.toast.showMessageBottom('Sintoma excluído com sucesso!','success');
       this.getAll();
